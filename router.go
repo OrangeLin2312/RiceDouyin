@@ -5,8 +5,10 @@ import (
 	"github.com/luuuweiii/RiceDouyin/controller"
 )
 
-func initRouter(r *gin.Engine) {
+func initRouter(h *controller.Handler) (r *gin.Engine) {
 	// public directory is used to serve static resources
+
+	r = gin.Default()
 	r.Static("/static", "./public")
 
 	apiRouter := r.Group("/douyin")
@@ -20,16 +22,17 @@ func initRouter(r *gin.Engine) {
 	apiRouter.GET("/publish/list/", controller.PublishList)
 
 	// extra apis - I
-	apiRouter.POST("/favorite/action/", controller.FavoriteAction)
-	apiRouter.GET("/favorite/list/", controller.FavoriteList)
-	apiRouter.POST("/comment/action/", controller.CommentAction)
-	apiRouter.GET("/comment/list/", controller.CommentList)
+	apiRouter.POST("/favorite/action/", h.FavoriteHandler.FavoriteAction)
+	apiRouter.GET("/favorite/list/", h.FavoriteHandler.FavoriteList)
+	//apiRouter.POST("/comment/action/", controller.CommentAction)
+	//apiRouter.GET("/comment/list/", controller.CommentList)
 
 	// extra apis - II
-	apiRouter.POST("/relation/action/", controller.RelationAction)
-	apiRouter.GET("/relation/follow/list/", controller.FollowList)
-	apiRouter.GET("/relation/follower/list/", controller.FollowerList)
-	apiRouter.GET("/relation/friend/list/", controller.FriendList)
-	apiRouter.GET("/message/chat/", controller.MessageChat)
-	apiRouter.POST("/message/action/", controller.MessageAction)
+	//apiRouter.POST("/relation/action/", controller.RelationAction)
+	//apiRouter.GET("/relation/follow/list/", controller.FollowList)
+	//apiRouter.GET("/relation/follower/list/", controller.FollowerList)
+	//apiRouter.GET("/relation/friend/list/", controller.FriendList)
+	//apiRouter.GET("/message/chat/", controller.MessageChat)
+	//apiRouter.POST("/message/action/", controller.MessageAction)
+	return r
 }

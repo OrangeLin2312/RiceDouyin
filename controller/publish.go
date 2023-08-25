@@ -3,9 +3,18 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/luuuweiii/RiceDouyin/service"
 	"net/http"
 	"path/filepath"
 )
+
+type VideoHandler struct {
+	VideoService *service.VideoService
+}
+
+func NewVideoHandler(VideoService *service.VideoService) *VideoHandler {
+	return &VideoHandler{VideoService: VideoService}
+}
 
 type VideoListResponse struct {
 	Response

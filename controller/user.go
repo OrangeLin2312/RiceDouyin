@@ -2,9 +2,18 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/luuuweiii/RiceDouyin/service"
 	"net/http"
 	"sync/atomic"
 )
+
+type UserHandler struct {
+	UserService *service.UserService
+}
+
+func NewUserHandler(userService *service.UserService) *UserHandler {
+	return &UserHandler{UserService: userService}
+}
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
 // user data will be cleared every time the server starts

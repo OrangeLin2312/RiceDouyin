@@ -39,7 +39,7 @@ func getTestUserToken(user string, e *httpexpect.Expect) (int, string) {
 			Status(http.StatusOK).
 			JSON().Object()
 		loginToken := loginResp.Value("token").String()
-		loginToken.Length().Gt(0)
+		loginToken.Length().Gt(0) //如果长度小于0，断言失败，终止test
 		token = loginToken.Raw()
 		userId = int(loginResp.Value("user_id").Number().Raw())
 	} else {

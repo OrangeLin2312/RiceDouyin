@@ -1,16 +1,13 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-	"github.com/luuuweiii/RiceDouyin/service"
-)
+import "github.com/luuuweiii/RiceDouyin/controller"
 
 func main() {
-	go service.RunMessageServer()
-
-	r := gin.Default()
-
-	initRouter(r)
+	handler, err := controller.BuildInjector()
+	if err != nil {
+		panic(err)
+	}
+	r := initRouter(handler)
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
