@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/luuuweiii/RiceDouyin/dao"
 	"github.com/luuuweiii/RiceDouyin/service"
+	"github.com/luuuweiii/RiceDouyin/utils/rabbitMQ"
 )
 
 type Handler struct {
@@ -26,18 +27,25 @@ func NewHandler(
 func BuildInjector() (*Handler, error) {
 	db, err := dao.Init()
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
+	conn, err := rabbitMQ.InitMqConn()
+	if err != nil {
+		panic(err)
+	}
 	//dao
 	favoriteDao := dao.NewFavoriteDao(db)
 	userDao := dao.NewUserDao(db)
 	videoDao := dao.NewVideoDao(db)
 
+	//middleware
+	rmq := rabbitMQ.NewFavoriteMq(conn, userDao, videoDao, favoriteDao)
+
 	//service
 	userService := service.NewUserService(userDao)
 	videoService := service.NewVideoService(videoDao)
-	favoriteService := service.NewFavoriteService(favoriteDao, userDao, videoDao, videoService)
+	favoriteService := service.NewFavoriteService(rmq, favoriteDao, userDao, videoDao, videoService)
 
 	//handler
 	favoriteHandler := NewFavoriteHandler(favoriteService)
